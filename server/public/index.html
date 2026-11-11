@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AutoRadar · Admin</title>
+<style>
+:root{--bg:#0E131A;--surface:#171F29;--surface-2:#1E2834;--fg:#E7ECF2;--muted:#93A0B1;--line:#283341;
+  --accent:#FF7B35;--accent-fg:#1A0E06;--ok:#43C98C;--ok-soft:#133022;--warn:#E8B451;--warn-soft:#33280F;
+  --bad:#FF6E6E;--bad-soft:#3A1919;--info:#6AA2FF;--info-soft:#1B2B45;
+  --f:"Manrope",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,monospace}
+*{box-sizing:border-box;margin:0}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--fg);font-family:var(--f);font-size:14px;line-height:1.45;
+  padding:max(16px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) 40px max(16px,env(safe-area-inset-left))}
+.wrap{max-width:760px;margin:0 auto}
+header{display:flex;align-items:center;gap:12px;padding:14px 0 18px}
+.logo{width:38px;height:38px;border-radius:10px;background:var(--accent);display:grid;place-items:center;flex:none}
+.logo svg{width:23px;height:23px;color:var(--accent-fg)}
+h1{font-size:19px;font-weight:700}
+header p{color:var(--muted);font-size:12.5px}
+.spacer{flex:1}
+button{font:inherit;cursor:pointer;border:0;border-radius:9px;padding:8px 12px;font-weight:600;color:var(--fg);background:var(--surface-2)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--info);outline-offset:2px}
+.btn-pri{background:var(--accent);color:var(--accent-fg)}
+.btn-ok{background:var(--ok-soft);color:var(--ok)}
+.btn-info{background:var(--info-soft);color:var(--info)}
+.btn-bad{background:var(--bad-soft);color:var(--bad)}
+input{font:inherit;background:var(--surface-2);color:var(--fg);border:1px solid var(--line);border-radius:9px;padding:9px 11px;width:100%}
+.login{max-width:340px;margin:60px auto;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px;display:grid;gap:12px}
+.login h2{font-size:17px}
+.muted{color:var(--muted);font-size:12.5px}
+.counts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.pill{background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:12.5px;font-weight:600;display:flex;gap:7px;align-items:center}
+.pill b{font-family:var(--mono)}
+.dotp{width:8px;height:8px;border-radius:50%;display:inline-block}
+.user{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:10px}
+.user-top{display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.user-top .nm{font-weight:700;font-size:15px}
+.user-top .id{font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+.tag{font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:6px;text-transform:uppercase;letter-spacing:.03em}
+.t-pending{background:var(--warn-soft);color:var(--warn)}
+.t-trial{background:var(--info-soft);color:var(--info)}
+.t-active{background:var(--ok-soft);color:var(--ok)}
+.t-expired{background:var(--bad-soft);color:var(--bad)}
+.t-disabled{background:var(--surface-2);color:var(--muted)}
+.meta{color:var(--muted);font-size:12.5px;margin-top:6px;display:flex;gap:14px;flex-wrap:wrap}
+.meta b{color:var(--fg);font-weight:600;font-variant-numeric:tabular-nums}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.acts input{width:62px;text-align:center;padding:7px}
+.inline{display:flex;gap:6px;align-items:center;background:var(--surface-2);border-radius:9px;padding:3px}
+.inline button{background:transparent}
+.empty{text-align:center;color:var(--muted);padding:40px}
+.err{color:var(--bad);font-size:13px;min-height:1.2em}
+.toast{position:fixed;left:50%;bottom:20px;transform:translate(-50%,120%);background:var(--surface);border:1px solid var(--line);
+  border-radius:12px;padding:10px 16px;font-size:13px;box-shadow:0 10px 30px rgba(0,0,0,.4);transition:transform .3s}
+.toast.show{transform:translate(-50%,0)}
+.bar{display:flex;gap:10px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9" opacity=".45"/><circle cx="12" cy="12" r="5" opacity=".7"/><path d="M12 12 19 6" stroke-linecap="round"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/></svg></div>
+    <div><h1>AutoRadar · Admin</h1><p>Kontrola korisnika i pretplata</p></div>
+    <div class="spacer"></div>
+    <button id="logout" hidden>Odjava</button>
+  </header>
+
+  <section id="loginView" class="login">
+    <h2>Prijava</h2>
+    <p class="muted">Unesi admin lozinku.</p>
+    <input id="pw" type="password" placeholder="Lozinka" autocomplete="current-password">
+    <button class="btn-pri" id="loginBtn">Uđi</button>
+    <p class="err" id="loginErr"></p>
+  </section>
+
+  <section id="panel" hidden>
+    <div class="bar">
+      <button class="btn-info" id="refresh">Osveži</button>
+      <span class="muted" id="updated"></span>
+    </div>
+    <div class="counts" id="counts"></div>
+    <div id="list"></div>
+  </section>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const $ = s => document.querySelector(s);
+let PW = sessionStorage.getItem('ar_pw') || '';
+
+const STATUS = {
+  pending:{t:'Na čekanju', c:'t-pending', d:'#E8B451'},
+  trial:{t:'Probni', c:'t-trial', d:'#6AA2FF'},
+  active:{t:'Aktivan', c:'t-active', d:'#43C98C'},
+  expired:{t:'Istekao', c:'t-expired', d:'#FF6E6E'},
+  disabled:{t:'Isključen', c:'t-disabled', d:'#93A0B1'}
+};
+const fmtDate = ms => ms ? new Date(ms).toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'numeric'}) : '–';
+function remain(ms){
+  if(!ms) return '–';
+  const d = Math.ceil((ms - Date.now())/86400000);
+  if(d < 0) return 'isteklo';
+  if(d === 0) return 'danas';
+  return d + (d===1?' dan':(d<5?' dana':' dana'));
+}
+let toastT;
+function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2200); }
+
+async function api(path, opts={}){
+  const res = await fetch(path, {...opts, headers:{'Content-Type':'application/json','x-admin-password':PW,...(opts.headers||{})}});
+  if(res.status===401){ logout(); throw new Error('401'); }
+  return res.json();
+}
+
+async function login(){
+  PW = $('#pw').value;
+  $('#loginErr').textContent = '';
+  try{
+    const r = await fetch('/api/admin/users',{headers:{'x-admin-password':PW}});
+    if(r.status===401){ $('#loginErr').textContent='Pogrešna lozinka.'; return; }
+    sessionStorage.setItem('ar_pw', PW);
+    $('#loginView').hidden = true; $('#panel').hidden = false; $('#logout').hidden = false;
+    load();
+  }catch(e){ $('#loginErr').textContent='Greška u vezi sa serverom.'; }
+}
+function logout(){ PW=''; sessionStorage.removeItem('ar_pw'); $('#panel').hidden=true; $('#logout').hidden=true; $('#loginView').hidden=false; }
+
+async function load(){
+  const { users } = await api('/api/admin/users');
+  render(users || []);
+  $('#updated').textContent = 'Ažurirano ' + new Date().toLocaleTimeString('de-DE');
+}
+
+function render(users){
+  const counts = {pending:0,trial:0,active:0,expired:0,disabled:0};
+  users.forEach(u => counts[u.status] = (counts[u.status]||0)+1);
+  $('#counts').innerHTML = Object.entries(STATUS).map(([k,s]) =>
+    `<span class="pill"><span class="dotp" style="background:${s.d}"></span>${s.t} <b>${counts[k]||0}</b></span>`).join('');
+
+  if(!users.length){ $('#list').innerHTML = '<div class="empty">Još nema nijednog korisnika.</div>'; return; }
+  $('#list').innerHTML = users.map(u => {
+    const s = STATUS[u.status] || STATUS.pending;
+    const until = u.status==='active' ? u.paidUntil : u.status==='trial' ? u.trialEndsAt : (u.status==='expired' ? (u.paidUntil||u.trialEndsAt) : null);
+    let acts = '';
+    if(u.status==='pending'){
+      acts = `<span class="inline">Probnih dana <input type="number" min="1" value="7" id="td-${u.id}"></span>
+        <button class="btn-ok" data-act="approve" data-id="${u.id}">Odobri</button>
+        <button class="btn-bad" data-act="disable" data-id="${u.id}">Odbij</button>`;
+    } else {
+      acts = `<span class="inline">Meseci <input type="number" min="1" value="1" id="mo-${u.id}"></span>
+        <button class="btn-ok" data-act="activate" data-id="${u.id}">Aktiviraj / produži</button>`;
+      if(u.status!=='disabled') acts += `<button class="btn-bad" data-act="disable" data-id="${u.id}">Isključi</button>`;
+      else acts += `<button class="btn-ok" data-act="activate" data-id="${u.id}">Ponovo uključi</button>`;
+    }
+    acts += `<button class="btn-bad" data-act="remove" data-id="${u.id}" title="Obriši">✕</button>`;
+    return `<div class="user">
+      <div class="user-top">
+        <div style="flex:1;min-width:0"><div class="nm">${esc(u.name)}</div><div class="id">${u.id} · ${esc(u.deviceId)}</div></div>
+        <span class="tag ${s.c}">${s.t}</span>
+      </div>
+      <div class="meta">
+        <span>Rok: <b>${fmtDate(until)}</b></span>
+        <span>Ostalo: <b>${remain(until)}</b></span>
+        <span>Registrovan: <b>${fmtDate(u.createdAt)}</b></span>
+      </div>
+      <div class="acts">${acts}</div>
+    </div>`;
+  }).join('');
+}
+
+const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+document.addEventListener('click', async e => {
+  const b = e.target.closest('[data-act]'); if(!b) return;
+  const id = b.dataset.id, act = b.dataset.act;
+  const body = { id };
+  if(act==='approve') body.trialDays = +($('#td-'+id)?.value || 7);
+  if(act==='activate') body.months = +($('#mo-'+id)?.value || 1);
+  if(act==='remove' && !confirm('Obrisati ovog korisnika?')) return;
+  try{
+    await api('/api/admin/'+act, { method:'POST', body: JSON.stringify(body) });
+    toast('Sačuvano');
+    load();
+  }catch(err){ toast('Greška'); }
+});
+$('#loginBtn').addEventListener('click', login);
+$('#pw').addEventListener('keydown', e => { if(e.key==='Enter') login(); });
+$('#refresh').addEventListener('click', load);
+$('#logout').addEventListener('click', logout);
+
+if(PW){ $('#pw').value = PW; login(); }
+</script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+{
+  "props": { "pageProps": { "searchResult": { "advertSummaryList": { "advertSummary": [
+    {
+      "id": "1001",
+      "seoUrl": "gebrauchtwagen/d/auto/vw-golf-vi-1001",
+      "attributes": { "attribute": [
+        { "name": "HEADING", "values": ["VW Golf VI 1.6 TDI"] },
+        { "name": "MAKE", "values": ["VW"] },
+        { "name": "MODEL", "values": ["Golf"] },
+        { "name": "PRICE", "values": ["6900"] },
+        { "name": "MILEAGE", "values": ["168000"] },
+        { "name": "YEAR_MODEL", "values": ["2011"] },
+        { "name": "FUEL", "values": ["Diesel"] },
+        { "name": "TRANSMISSION", "values": ["Schaltgetriebe"] },
+        { "name": "POWER", "values": ["77"] },
+        { "name": "POSTCODE", "values": ["1100"] },
+        { "name": "LOCATION", "values": ["Wien, Favoriten"] },
+        { "name": "STATE", "values": ["Wien"] },
+        { "name": "ISPRIVATE", "values": ["1"] },
+        { "name": "SELLER_AD_COUNT", "values": ["1"] },
+        { "name": "PHONE", "values": ["0664 4821 093"] },
+        { "name": "ALL_IMAGE_URLS", "values": ["https://cache.willhaben.at/mmo/1/golf_a.jpg;https://cache.willhaben.at/mmo/1/golf_b.jpg"] },
+        { "name": "DESCRIPTION", "values": ["Pickerl neu, Zahnriemen gemacht. Nichtraucher, Winterreifen dabei."] }
+      ] }
+    },
+    {
+      "id": "1002",
+      "seoUrl": "gebrauchtwagen/d/auto/ford-focus-1002",
+      "attributes": { "attribute": [
+        { "name": "HEADING", "values": ["Ford Focus 1.6 TDCi"] },
+        { "name": "MAKE", "values": ["Ford"] },
+        { "name": "PRICE", "values": ["4990"] },
+        { "name": "MILEAGE", "values": ["189000"] },
+        { "name": "YEAR_MODEL", "values": ["2012"] },
+        { "name": "FUEL", "values": ["Diesel"] },
+        { "name": "STATE", "values": ["Kärnten"] },
+        { "name": "LOCATION", "values": ["Klagenfurt"] },
+        { "name": "ISPRIVATE", "values": ["0"] },
+        { "name": "SELLER_NAME", "values": ["AutoPoint Süd GmbH"] },
+        { "name": "SELLER_AD_COUNT", "values": ["34"] },
+        { "name": "ALL_IMAGE_URLS", "values": ["https://cache.willhaben.at/mmo/2/focus.jpg"] },
+        { "name": "DESCRIPTION", "values": ["Finanzierung möglich! 12 Monate Garantie. Weitere Fahrzeuge auf Lager. UID vorhanden."] }
+      ] }
+    },
+    {
+      "id": "1003",
+      "seoUrl": "gebrauchtwagen/d/auto/skoda-fabia-1003",
+      "attributes": { "attribute": [
+        { "name": "HEADING", "values": ["Škoda Fabia 1.2"] },
+        { "name": "MAKE", "values": ["Škoda"] },
+        { "name": "PRICE", "values": ["4100"] },
+        { "name": "MILEAGE", "values": ["104000"] },
+        { "name": "YEAR_MODEL", "values": ["2013"] },
+        { "name": "FUEL", "values": ["Benzin"] },
+        { "name": "STATE", "values": ["Wien"] },
+        { "name": "LOCATION", "values": ["Wien, Floridsdorf"] },
+        { "name": "ISPRIVATE", "values": ["1"] },
+        { "name": "SELLER_AD_COUNT", "values": ["6"] },
+        { "name": "DESCRIPTION", "values": ["Fabia in gutem Zustand. Weitere Autos in meinem Profil."] }
+      ] }
+    }
+  ] } } } }
+}
