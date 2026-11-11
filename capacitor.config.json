@@ -2,7 +2,11 @@
   "appId": "rs.nexdesign.autoradar",
   "appName": "AutoRadar",
   "webDir": "www",
-  "server": { "androidScheme": "https" },
+  "server": {
+    "androidScheme": "https",
+    "url": "https://radar.nexdesign.rs/app",
+    "cleartext": false
+  },
   "plugins": {
     "LocalNotifications": {
       "smallIcon": "ic_stat_icon",
