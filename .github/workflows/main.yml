@@ -16,8 +16,8 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
       - run: npm install
-      - run: npx cap add android
-      - run: npx cap sync android
+      - run: npx -y @capacitor/cli@6.1.2 add android
+      - run: npx -y @capacitor/cli@6.1.2 sync android
       - run: |
           cd android
           chmod +x ./gradlew
