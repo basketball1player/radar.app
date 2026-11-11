@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AutoRadar</title>
+<style>
+:root{--bg:#0E131A;--surface:#171F29;--surface-2:#1E2834;--fg:#E7ECF2;--muted:#93A0B1;--line:#283341;
+  --accent:#FF7B35;--accent-fg:#1A0E06;--ok:#43C98C;--ok-soft:#133022;--action:#6AA2FF;--action-soft:#1B2B45;--bad:#FF6E6E;--bad-soft:#3A1919;
+  --f:"Segoe UI",system-ui,-apple-system,sans-serif}
+*{box-sizing:border-box;margin:0}[hidden]{display:none!important}
+body{background:var(--bg);color:var(--fg);font-family:var(--f);font-size:14px;line-height:1.45;
+  padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+.wrap{max-width:520px;margin:0 auto;padding:0 14px 30px}
+header{display:flex;align-items:center;gap:12px;padding:14px 0 6px}
+.logo{width:36px;height:36px;border-radius:10px;background:var(--accent);display:grid;place-items:center;flex:none}
+.logo svg{width:22px;height:22px;color:var(--accent-fg)}
+h1{font-size:18px;font-weight:700}
+header p{color:var(--muted);font-size:12px}
+.run{margin-left:auto;display:flex;align-items:center;gap:7px;background:var(--surface-2);border-radius:999px;padding:7px 11px;font-size:12.5px;font-weight:600;border:0;color:var(--fg)}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--ok)}.dot.off{background:var(--muted)}
+#banner{background:var(--action-soft);color:var(--action);border-radius:10px;padding:9px 12px;font-weight:600;font-size:13px;margin:8px 0}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.stat .k{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.03em;font-weight:700}
+.stat .v{font-size:20px;font-weight:700;margin-top:2px}
+.feed{display:grid;gap:10px;margin-top:4px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:grid;grid-template-columns:120px 1fr}
+.thumb{background:var(--surface-2);min-height:104px;position:relative}
+.thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.info{padding:10px 12px}
+.info h3{font-size:14.5px;font-weight:600}
+.price{font-size:18px;font-weight:700;margin:2px 0}
+.meta,.loc{color:var(--muted);font-size:12.5px}
+.acts{grid-column:1/-1;display:flex;gap:8px;padding:0 12px 12px;flex-wrap:wrap}
+.btn{flex:1;min-width:120px;text-align:center;border-radius:9px;padding:9px;font-weight:700;font-size:13px;text-decoration:none;border:0}
+.btn.call{background:var(--ok-soft);color:var(--ok)}
+.btn.msg{background:var(--action-soft);color:var(--action)}
+.btn.open{background:var(--surface-2);color:var(--fg);flex:0 0 auto;min-width:0;padding:9px 14px}
+.empty{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:34px 16px;text-align:center;color:var(--muted)}
+.sec{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;font-weight:700;margin:18px 2px 8px}
+.cfg{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;display:grid;gap:10px}
+.cfg label{font-size:12px;color:var(--muted);font-weight:700}
+.cfg input{width:100%;background:var(--surface-2);color:var(--fg);border:1px solid var(--line);border-radius:9px;padding:10px}
+.cfg .row{display:flex;gap:10px}.cfg .row>div{flex:1}
+button.save{background:var(--accent);color:var(--accent-fg);border:0;border-radius:9px;padding:11px;font-weight:700}
+.log{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:6px 12px;margin-top:8px;font-size:12px}
+.log div{display:flex;gap:10px;padding:5px 0;border-bottom:1px solid var(--line)}.log div:last-child{border:0}
+.log .tm{color:var(--muted);flex:none}.log .ok{color:var(--ok)}.log .warn{color:#E8B451}.log .bad{color:var(--bad)}
+#lock{position:fixed;inset:0;background:var(--bg);z-index:10;display:grid;place-items:center;padding:30px;text-align:center}
+#lock .ring{width:88px;height:88px;border-radius:50%;background:var(--bad-soft);color:var(--bad);display:grid;place-items:center;margin:0 auto 16px}
+#lock .ring svg{width:42px;height:42px}
+#lock .lk-t{font-size:21px;font-weight:700}#lock .lk-s{color:var(--muted);margin-top:8px;max-width:300px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9" opacity=".45"/><circle cx="12" cy="12" r="5" opacity=".7"/><path d="M12 12 19 6" stroke-linecap="round"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/></svg></div>
+    <div><h1>AutoRadar</h1><p>Willhaben · privatni do 10.000 €</p></div>
+    <button class="run" id="toggleRun"><span class="dot" id="dot"></span><span id="runTxt">Radar radi</span></button>
+  </header>
+
+  <div id="banner" hidden></div>
+
+  <div class="stats">
+    <div class="stat"><div class="k">Provera</div><div class="v" id="stChecks">0</div></div>
+    <div class="stat"><div class="k">Novih</div><div class="v" id="stNew">0</div></div>
+    <div class="stat"><div class="k">Trgovaca</div><div class="v" id="stDrop">0</div></div>
+  </div>
+
+  <div class="feed" id="feed"></div>
+
+  <div class="sec">Dnevnik</div>
+  <div class="log" id="log"></div>
+
+  <div class="sec">Podešavanja</div>
+  <div class="cfg">
+    <div><label for="srv">Adresa servera</label><input id="srv" placeholder="https://radar.nexdesign.rs"></div>
+    <div class="row">
+      <div><label for="iv">Provera (sek)</label><input id="iv" type="number" min="3" value="6"></div>
+    </div>
+    <button class="save" id="saveCfg">Sačuvaj</button>
+  </div>
+</div>
+
+<div id="lock" hidden>
+  <div>
+    <div class="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div>
+    <div class="lk-t">Zaključano</div>
+    <div class="lk-s"></div>
+  </div>
+</div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
